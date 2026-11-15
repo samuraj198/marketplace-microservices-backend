@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  title: Catalog microservice
+  description: Catalog microservice
+  version: 1.0.0
+servers:
+  - url: '/api/catalog'
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Получить все товары
+      responses:
+        '200':
+          description: Успешное получение всех товаров
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+    post:
+      tags:
+        - Products (Admin)
+      summary: Создание товара
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductStore'
+      responses:
+        '201':
+          description: Успешное создание товара
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Product'
+  /products/{product}:
+    get:
+      tags:
+        - Products
+      summary: Получение 1 товара
+      parameters:
+        - name: product
+          in: path
+          required: true
+          description: Уникальный идентификатор товара
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное получение 1 товара
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Product'
+    patch:
+      tags:
+        - Products (Admin)
+      summary: Обновление товара
+      parameters:
+        - name: product
+          in: path
+          required: true
+          description: Уникальный идентификатор товара
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+      responses:
+        '200':
+          description: Успешное обновление товара
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Product'
+    delete:
+      tags:
+        - Products (Admin)
+      summary: Удаление товара
+      parameters:
+        - name: product
+          in: path
+          required: true
+          description: Уникальный идентификатор товара
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Успешное удаление товара
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Product name
+        description:
+          type: string
+          example: Product description
+        category:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: Category name
+        attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: Attribute name
+              slug:
+                type: string
+                example: Attribute slug
+              value:
+                type: string
+                example: Attribute value
+        quantity:
+          type: integer
+          example: 5
+        img:
+          type: string
+          example: photo.webp
+        price:
+          type: number
+          example: 1000.00
+        article:
+          type: string
+          example: ART-123113
+        created_at:
+          type: string
+          format: date-time
+          example: 2026-01-01T12:34:56Z
+    ProductStore:
+      type: object
+      required:
+        - name
+        - description
+        - category_id
+        - price
+        - article
+      properties:
+        name:
+          type: string
+          example: Product name
+        description:
+          type: string
+          example: Product description
+        category_id:
+          type: integer
+          example: 1
+        attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              attribute_id:
+                type: integer
+                example: 1
+              value_id:
+                type: integer
+                example: 1
+        quantity:
+          type: integer
+          example: 5
+        price:
+          type: number
+          example: 1000.00
+        article:
+          type: string
+          example: ART-123113
+    ProductUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Product name
+        description:
+          type: string
+          example: Product description
+        category_id:
+          type: integer
+          example: 1
+        attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              attribute_id:
+                type: integer
+                example: 1
+              value_id:
+                type: integer
+                example: 1
+        quantity:
+          type: integer
+          example: 5
+        price:
+          type: number
+          example: 1000.00
+        article:
+          type: string
+          example: ART-123113
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Category name
+        img:
+          type: string
+          example: photo.webp
