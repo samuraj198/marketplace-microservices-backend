@@ -38,7 +38,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             "name.required" => "Имя товара обязательно для заполнения",
-            "description" => "Описание товара обязательно для заполнения",
+            "description.required" => "Описание товара обязательно для заполнения",
             "attributes.array" => "Характеристики товара должны быть в формате array",
             "category_id.required" => "Идентификатор категории обязателен для заполнения",
             "category_id.exists" => "Категории с таким идентификатором не существует",

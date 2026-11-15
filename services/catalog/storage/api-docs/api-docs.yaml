@@ -106,7 +106,299 @@ paths:
       responses:
         '204':
           description: Успешное удаление товара
-
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Получение категорий
+      responses:
+        '200':
+          description: Успешное получение всех категорий
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+    post:
+      tags:
+        - Categories (Admin)
+      summary: Создание категории
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryStore'
+      responses:
+        '201':
+          description: Успешное создание 1 категории
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Category'
+  /categories/{category}:
+    get:
+      tags:
+        - Categories
+      summary: Получение 1 категории
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Уникальный идентификатор категории
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное получение 1 категории
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Category'
+    patch:
+      tags:
+        - Categories (Admin)
+      summary: Обновление 1 категории
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Уникальный идентификатор категории
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+      responses:
+        '200':
+          description: Успешное обновление категории
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Category'
+    delete:
+      tags:
+        - Categories (Admin)
+      summary: Удаление 1 категории
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Уникальный идентификатор категории
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Успешное удаление категории
+  /categories/{category}/attributes:
+    get:
+      tags:
+        - Attributes
+      summary: Получение атрибутов для выбранной категории
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Уникальный идентификатор категории
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное получение атрибутов для выбранной категории
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttributeWithValues'
+    post:
+      tags:
+        - Attributes (Admin)
+      summary: Привязка атрибутов к выбранной категории
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Уникальный идентификатор категории
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncAttributes'
+      responses:
+        '204':
+          description: Успешная привязка атрибутов к категории
+  /attributes:
+    get:
+      tags:
+        - Attributes
+      summary: Получение всех атрибутов
+      responses:
+        '200':
+          description: Успешное получение всех атрибутов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttributeWithValues'
+    post:
+      tags:
+        - Attributes (Admin)
+      summary: Создание атрибута
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeStore'
+      responses:
+        '201':
+          description: Успешное создание атрибута
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AttributeWithoutValues'
+  /attributes/{attribute}:
+    patch:
+      tags:
+        - Attributes (Admin)
+      summary: Обновление атрибута
+      parameters:
+        - name: attribute
+          in: path
+          required: true
+          description: Уникальный идентификатор атрибута
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdate'
+      responses:
+        '200':
+          description: Успешное обновление атрибута
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AttributeWithValues'
+    delete:
+      tags:
+        - Attributes (Admin)
+      summary: Удаление атрибута
+      parameters:
+        - name: attribute
+          in: path
+          required: true
+          description: Уникальный идентификатор атрибута
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Успешное удаление атрибута
+  /attributes/{attribute}/values:
+    post:
+      tags:
+        - AttributeValues (Admin)
+      summary: Добавление значения атрибута
+      parameters:
+        - name: attribute
+          in: path
+          required: true
+          description: Уникальный идентификатор атрибута
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeValueStore'
+      responses:
+        '201':
+          description: Успешное добавление значения атрибута
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AttributeValue'
+  /attribute-values/{value}:
+    patch:
+      tags:
+        - AttributeValues (Admin)
+      summary: Обновление значения атрибута
+      parameters:
+        - name: value
+          in: path
+          required: true
+          description: Уникальный идентификатор значения атрибута
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeValueUpdate'
+      responses:
+        '200':
+          description: Успешное изменение значения атрибута
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AttributeValue'
+    delete:
+      tags:
+        - AttributeValues (Admin)
+      summary: Удаление значения атрибута
+      parameters:
+        - name: value
+          in: path
+          required: true
+          description: Уникальный идентификатор значения атрибута
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Успешное удаление значения атрибута
 components:
   schemas:
     Product:
@@ -245,3 +537,107 @@ components:
         img:
           type: string
           example: photo.webp
+    CategoryStore:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Category name
+    CategoryUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Category name
+    AttributeWithValues:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Attribute name
+        slug:
+          type: string
+          example: attribute_name
+        values:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              value:
+                type: string
+                example: Attribute value name
+    AttributeWithoutValues:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Attribute name
+        slug:
+          type: string
+          example: attribute_name
+    AttributeStore:
+      type: object
+      required:
+        - name
+        - slug
+      properties:
+        name:
+          type: string
+          example: Attribute name
+        slug:
+          type: string
+          example: attribute_name
+    AttributeUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Attribute name
+        slug:
+          type: string
+          example: attribute_name
+    SyncAttributes:
+      type: object
+      properties:
+        attributes:
+          type: array
+          items:
+            type: integer
+            example: 1
+    AttributeValue:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        value:
+          type: string
+          example: Value name
+    AttributeValueStore:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          example: Value name
+    AttributeValueUpdate:
+      type: object
+      properties:
+        attribute_id:
+          type: integer
+          example: 1
+        value:
+          type: string
+          example: Value name

@@ -39,4 +39,15 @@ class UpdateProductRequest extends FormRequest
                 ->ignore($productId)],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            "attributes.array" => "Характеристики товара должны быть в формате array",
+            "category_id.exists" => "Категории с таким идентификатором не существует",
+            "price.numeric" => "Введенное значение для цены не является числом",
+            "price.min" => "Цена товара не может быть отрицательной",
+            "article.unique" => "Артикул товара должен быть уникальным"
+        ];
+    }
 }
