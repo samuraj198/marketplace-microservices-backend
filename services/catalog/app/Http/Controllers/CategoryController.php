@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Requests\UploadImageRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
+use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController extends Controller
@@ -39,6 +42,17 @@ class CategoryController extends Controller
         $updatedCategory = $this->categoryService->update($category, $request->validated());
 
         return CategoryResource::make($updatedCategory);
+    }
+
+    public function uploadImage(Category $category,
+                                UploadImageRequest $request,
+                                ImageService $imageService): JsonResponse
+    {
+        $path = $imageService->uploadImage($category, $request->validated('img'));
+
+        $category->update(['img' => $path]);
+
+        return response()->json(['image_path' => $path]);
     }
 
     public function destroy(Category $category): void

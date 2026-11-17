@@ -55,3 +55,9 @@ Route::post('/catalog/attributes/{attribute}/values', [AttributeValueController:
 Route::patch('/catalog/attribute-values/{value}', [AttributeValueController::class, 'update']);
 // Удаление значения атрибута
 Route::delete('/catalog/attribute-values/{value}', [AttributeValueController::class, 'destroy']);
+
+// ROUTES для картинок
+// Загрузка картинки для товара
+Route::post('/catalog/products/{product}/image', [ProductController::class, 'uploadImage']);
+// Загрузка картинки для категории
+Route::post('/catalog/categories/{category}/image', [CategoryController::class, 'uploadImage']);

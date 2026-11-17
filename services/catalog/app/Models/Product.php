@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-#[Fillable(["name", "description", "category_id", "quantity", "price", "article"])]
+#[Fillable(["name", "description", "category_id", "quantity", "img", "price", "article"])]
 // Продукты(товары)
 class Product extends Model
 {

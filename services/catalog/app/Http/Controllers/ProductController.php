@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\UploadImageRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Services\ImageService;
 use App\Services\ProductService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ProductController extends Controller
@@ -46,6 +49,17 @@ class ProductController extends Controller
             'attributeValues.attribute:id,name,slug',
             'attributeValues.value:id,value',
         ]));
+    }
+
+    public function uploadImage(Product $product,
+                                UploadImageRequest $request,
+                                ImageService $imageService): JsonResponse
+    {
+        $path = $imageService->uploadImage($product, $request->validated('img'));
+
+        $product->update(['img' => $path]);
+
+        return response()->json(['image_path' => $path]);
     }
 
     public function destroy(Product $product): void

@@ -106,6 +106,43 @@ paths:
       responses:
         '204':
           description: Успешное удаление товара
+  /products/{product}/image:
+    post:
+      tags:
+        - Products (Admin)
+      summary: Добавление картинки для товара
+      description: фронт должен делать 2 отдельных запроса на создание товара и на картинку
+      parameters:
+        - name: product
+          in: path
+          required: true
+          description: Уникальный идентификатор товара
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - img
+              properties:
+                img:
+                  type: string
+                  format: binary
+                  description: Файл изображения (jpeg, jpg, png, webp). Максимальный размер 10 МБ
+      responses:
+        '200':
+          description: Успешное сохранение картинки
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image_path:
+                    type: string
+                    example: folder/image_name.webp (так же есть картинки с суффиксами после image_name (_large и _small))
   /categories:
     get:
       tags:
@@ -250,6 +287,43 @@ paths:
       responses:
         '204':
           description: Успешная привязка атрибутов к категории
+  /categories/{category}/image:
+    post:
+      tags:
+        - Categories (Admin)
+      summary: Добавление картинки для категории
+      description: фронт должен делать 2 отдельных запроса на создание категории и на картинку
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Уникальный идентификатор категории
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - img
+              properties:
+                img:
+                  type: string
+                  format: binary
+                  description: Файл изображения (jpeg, jpg, png, webp). Максимальный размер 10 МБ
+      responses:
+        '200':
+          description: Успешное сохранение картинки
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image_path:
+                    type: string
+                    example: folder/image_name.webp (так же есть картинки с суффиксами после image_name (_large и _small))
   /attributes:
     get:
       tags:

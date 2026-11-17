@@ -46,6 +46,16 @@ services:
       - catalog_db_data:/var/lib/mysql
     networks:
       - marketplace-microservices-backend
+  image_processor:
+    build:
+      context: ./services/image_processor
+    env_file:
+      - ./services/image_processor/.env
+    depends_on:
+      - catalog_php
+    networks:
+      - marketplace-microservices-backend
+    restart: unless-stopped
 
 networks:
   marketplace-microservices-backend:
