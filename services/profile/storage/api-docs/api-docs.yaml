@@ -1,0 +1,130 @@
+openapi: 3.0.3
+info:
+  title: Profile Service
+  description: Profile Service
+  version: 1.0.0
+servers:
+  - url: '/api/profile'
+paths:
+  /register:
+    post:
+      tags:
+        - User
+      summary: Регистрация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+      responses:
+        '201':
+          description: Успешная регистрация
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    $ref: '#/components/schemas/Token'
+  /auth:
+    post:
+      tags:
+        - User
+      summary: Авторизация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthUser'
+      responses:
+        '200':
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    $ref: '#/components/schemas/Token'
+  /me:
+    get:
+      tags:
+        - User
+      summary: Получение юзера для профиля
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Успешное получение данных авторизованного пользователя
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+  /logout:
+    post:
+      tags:
+        - User
+      summary: Выход пользователя из аккаунта
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Успешный выход из аккаунта
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Some name
+        email:
+          type: string
+          example: example@example.com
+    RegisterUser:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Some name
+        email:
+          type: string
+          example: example@example.com
+        password:
+          type: string
+          format: password
+          example: password
+        password_confirmation:
+          type: string
+          format: password
+          example: password
+    AuthUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: example@example.com
+        password:
+          type: string
+          format: password
+          example: password
+    Token:
+      type: string
+      example: some random string

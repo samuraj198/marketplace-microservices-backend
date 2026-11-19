@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+#  В будущем добавить swagger_ui контейнер для общей документации
   api_gateway:
     image: nginx:alpine
     restart: unless-stopped
@@ -9,7 +10,7 @@ services:
     volumes:
       - ./docker/gateway/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      - catalog_nginx
+      - profile_nginx
     networks:
       - marketplace-microservices-backend
   catalog_nginx:
@@ -46,6 +47,40 @@ services:
       - catalog_db_data:/var/lib/mysql
     networks:
       - marketplace-microservices-backend
+  profile_nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    environment:
+      PHP_HOST: profile_php
+    volumes:
+      - ./services/profile:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/templates/default.conf.template:ro
+    depends_on:
+      - profile_php
+    networks:
+      - marketplace-microservices-backend
+  profile_php:
+    build:
+      context: .
+      dockerfile: docker/dockerfiles/php.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./services/profile:/var/www/html
+    depends_on:
+      - profile_mysql
+    networks:
+      - marketplace-microservices-backend
+  profile_mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    env_file:
+      - services/profile/.env
+    ports:
+      - "33062:3306"
+    volumes:
+      - profile_db_data:/var/lib/mysql
+    networks:
+      - marketplace-microservices-backend
   image_processor:
     build:
       context: ./services/image_processor
@@ -62,3 +97,4 @@ networks:
     driver: bridge
 volumes:
   catalog_db_data:
+  profile_db_data:
