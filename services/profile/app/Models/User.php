@@ -36,6 +36,8 @@ class User extends Authenticatable
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'role' => $this->role
+        ];
     }
 }
