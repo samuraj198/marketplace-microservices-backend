@@ -27,6 +27,8 @@ paths:
       tags:
         - Products (Admin)
       summary: Создание товара
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -43,6 +45,10 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Product'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /products/{product}:
     get:
       tags:
@@ -69,6 +75,8 @@ paths:
       tags:
         - Products (Admin)
       summary: Обновление товара
+      security:
+        - bearerAuth: []
       parameters:
         - name: product
           in: path
@@ -92,10 +100,16 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Product'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
     delete:
       tags:
         - Products (Admin)
       summary: Удаление товара
+      security:
+        - bearerAuth: []
       parameters:
         - name: product
           in: path
@@ -106,12 +120,18 @@ paths:
       responses:
         '204':
           description: Успешное удаление товара
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /products/{product}/image:
     post:
       tags:
         - Products (Admin)
       summary: Добавление картинки для товара
       description: фронт должен делать 2 отдельных запроса на создание товара и на картинку
+      security:
+        - bearerAuth: []
       parameters:
         - name: product
           in: path
@@ -141,8 +161,13 @@ paths:
                 type: object
                 properties:
                   image_path:
+                    description: Есть разные размеры картинок, если к названию прибавить суффикс (_large, _small)
                     type: string
-                    example: folder/image_name.webp (так же есть картинки с суффиксами после image_name (_large и _small))
+                    example: folder/image_name.webp
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /categories:
     get:
       tags:
@@ -164,6 +189,8 @@ paths:
       tags:
         - Categories (Admin)
       summary: Создание категории
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -180,6 +207,10 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /categories/{category}:
     get:
       tags:
@@ -206,6 +237,8 @@ paths:
       tags:
         - Categories (Admin)
       summary: Обновление 1 категории
+      security:
+        - bearerAuth: []
       parameters:
         - name: category
           in: path
@@ -229,10 +262,16 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
     delete:
       tags:
         - Categories (Admin)
       summary: Удаление 1 категории
+      security:
+        - bearerAuth: []
       parameters:
         - name: category
           in: path
@@ -243,6 +282,10 @@ paths:
       responses:
         '204':
           description: Успешное удаление категории
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /categories/{category}/attributes:
     get:
       tags:
@@ -271,6 +314,8 @@ paths:
       tags:
         - Attributes (Admin)
       summary: Привязка атрибутов к выбранной категории
+      security:
+        - bearerAuth: []
       parameters:
         - name: category
           in: path
@@ -287,12 +332,18 @@ paths:
       responses:
         '204':
           description: Успешная привязка атрибутов к категории
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /categories/{category}/image:
     post:
       tags:
         - Categories (Admin)
       summary: Добавление картинки для категории
       description: фронт должен делать 2 отдельных запроса на создание категории и на картинку
+      security:
+        - bearerAuth: []
       parameters:
         - name: category
           in: path
@@ -322,8 +373,13 @@ paths:
                 type: object
                 properties:
                   image_path:
+                    description: Есть разные размеры картинок, если добавить суффиксы (_large, _small)
                     type: string
-                    example: folder/image_name.webp (так же есть картинки с суффиксами после image_name (_large и _small))
+                    example: folder/image_name.webp
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /attributes:
     get:
       tags:
@@ -345,6 +401,8 @@ paths:
       tags:
         - Attributes (Admin)
       summary: Создание атрибута
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -361,11 +419,17 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/AttributeWithoutValues'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /attributes/{attribute}:
     patch:
       tags:
         - Attributes (Admin)
       summary: Обновление атрибута
+      security:
+        - bearerAuth: []
       parameters:
         - name: attribute
           in: path
@@ -389,10 +453,16 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/AttributeWithValues'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
     delete:
       tags:
         - Attributes (Admin)
       summary: Удаление атрибута
+      security:
+        - bearerAuth: []
       parameters:
         - name: attribute
           in: path
@@ -403,11 +473,17 @@ paths:
       responses:
         '204':
           description: Успешное удаление атрибута
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /attributes/{attribute}/values:
     post:
       tags:
         - AttributeValues (Admin)
       summary: Добавление значения атрибута
+      security:
+        - bearerAuth: []
       parameters:
         - name: attribute
           in: path
@@ -431,11 +507,17 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/AttributeValue'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
   /attribute-values/{value}:
     patch:
       tags:
         - AttributeValues (Admin)
       summary: Обновление значения атрибута
+      security:
+        - bearerAuth: []
       parameters:
         - name: value
           in: path
@@ -459,10 +541,16 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/AttributeValue'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
     delete:
       tags:
         - AttributeValues (Admin)
       summary: Удаление значения атрибута
+      security:
+        - bearerAuth: []
       parameters:
         - name: value
           in: path
@@ -473,7 +561,16 @@ paths:
       responses:
         '204':
           description: Успешное удаление значения атрибута
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Product:
       type: object
@@ -715,3 +812,24 @@ components:
         value:
           type: string
           example: Value name
+  responses:
+    UnauthenticatedError:
+      description: Пользователь не авторизован или истек срок жизни токена
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthenticated.
+    ForbiddenError:
+      description: У пользователя недостаточно прав для получения доступа
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Forbidden.

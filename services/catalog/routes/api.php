@@ -10,54 +10,34 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //})->middleware('auth:sanctum');
 
-// ROUTES ДЛЯ ТОВАРОВ
-// Получение всех товаров
-Route::get('/catalog/products', [ProductController::class, 'index']);
-// Получение 1 товара
-Route::get('/catalog/products/{product}', [ProductController::class, 'show']);
-// Создание товара
-Route::post('/catalog/products', [ProductController::class, 'store']);
-// Обновление товара
-Route::patch('/catalog/products/{product}', [ProductController::class, 'update']);
-// Удаление товара
-Route::delete('/catalog/products/{product}', [ProductController::class, 'destroy']);
+Route::prefix('catalog')->group(function () {
+    // Публичные get запросы
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{product}', [ProductController::class, 'show']);
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{category}', [CategoryController::class, 'show']);
+    Route::get('/categories/{category}/attributes', [AttributeController::class, 'getForCategory']);
+    Route::get('/attributes', [AttributeController::class, 'index']);
 
-// ROUTES ДЛЯ КАТЕГОРИЙ
-// Получение всех категорий
-Route::get('/catalog/categories', [CategoryController::class, 'index']);
-// Получение 1 категории
-Route::get('/catalog/categories/{category}', [CategoryController::class, 'show']);
-// Создание категории
-Route::post('/catalog/categories', [CategoryController::class, 'store']);
-// Обновление категории
-Route::patch('/catalog/categories/{category}', [CategoryController::class, 'update']);
-// Удаление категории
-Route::delete('/catalog/categories/{category}', [CategoryController::class, 'destroy']);
+    // Админские маршруты
+    Route::middleware(['jwt.verify','role:admin'])->group(function () {
+        Route::post('/products', [ProductController::class, 'store']);
+        Route::patch('/products/{product}', [ProductController::class, 'update']);
+        Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+        Route::post('/products/{product}/image', [ProductController::class, 'uploadImage']);
 
-// ROUTES ДЛЯ АТРИБУТОВ
-// Получение атрибутов для 1 категории
-Route::get('/catalog/categories/{category}/attributes', [AttributeController::class, 'getForCategory']);
-// Получение всех атрибутов
-Route::get('/catalog/attributes', [AttributeController::class, 'index']);
-// Привязка атрибутов к категории
-Route::post('/catalog/categories/{category}/attributes', [AttributeController::class, 'syncAttributes']);
-// Создание атрибута
-Route::post('/catalog/attributes', [AttributeController::class, 'store']);
-// Обновление атрибута
-Route::patch('/catalog/attributes/{attribute}', [AttributeController::class, 'update']);
-// Удаление атрибута
-Route::delete('/catalog/attributes/{attribute}', [AttributeController::class, 'destroy']);
+        Route::post('/categories', [CategoryController::class, 'store']);
+        Route::patch('/categories/{category}', [CategoryController::class, 'update']);
+        Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+        Route::post('/categories/{category}/attributes', [AttributeController::class, 'syncAttributes']);
+        Route::post('/categories/{category}/image', [CategoryController::class, 'uploadImage']);
 
-// ROUTES ДЛЯ ЗНАЧЕНИЙ АТРИБУТА
-// Создание значения атрибута
-Route::post('/catalog/attributes/{attribute}/values', [AttributeValueController::class, 'store']);
-// Обновление значения атрибута
-Route::patch('/catalog/attribute-values/{value}', [AttributeValueController::class, 'update']);
-// Удаление значения атрибута
-Route::delete('/catalog/attribute-values/{value}', [AttributeValueController::class, 'destroy']);
+        Route::post('/attributes', [AttributeController::class, 'store']);
+        Route::patch('/attributes/{attribute}', [AttributeController::class, 'update']);
+        Route::delete('/attributes/{attribute}', [AttributeController::class, 'destroy']);
 
-// ROUTES для картинок
-// Загрузка картинки для товара
-Route::post('/catalog/products/{product}/image', [ProductController::class, 'uploadImage']);
-// Загрузка картинки для категории
-Route::post('/catalog/categories/{category}/image', [CategoryController::class, 'uploadImage']);
+        Route::post('/attributes/{attribute}/values', [AttributeValueController::class, 'store']);
+        Route::patch('/attribute-values/{value}', [AttributeValueController::class, 'update']);
+        Route::delete('/attribute-values/{value}', [AttributeValueController::class, 'destroy']);
+    });
+});

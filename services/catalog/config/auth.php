@@ -44,9 +44,8 @@ return [
         ],
         'api' => [
             'driver' => 'jwt',
-            'provider' => null,
+            'provider' => 'users',
         ]
-
     ],
 
     /*

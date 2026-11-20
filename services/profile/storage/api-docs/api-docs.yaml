@@ -69,6 +69,8 @@ paths:
                 properties:
                   user:
                     $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
   /logout:
     post:
       tags:
@@ -79,6 +81,8 @@ paths:
       responses:
         '204':
           description: Успешный выход из аккаунта
+        '401':
+          $ref: '#/components/responses/UnauthenticatedError'
 components:
   securitySchemes:
     bearerAuth:
@@ -128,3 +132,14 @@ components:
     Token:
       type: string
       example: some random string
+  responses:
+    UnauthenticatedError:
+      description: Пользователь не авторизован или истек срок жизни токена
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthenticated.
