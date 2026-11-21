@@ -1,0 +1,8 @@
+openapi: 3.0.3
+info:
+  title: Cart Service
+  description: Cart Service
+  version: 1.0.0
+servers:
+  - url: '/api/cart'
+paths:

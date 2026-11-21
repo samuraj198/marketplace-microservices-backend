@@ -82,6 +82,40 @@ services:
       - profile_db_data:/var/lib/mysql
     networks:
       - marketplace-microservices-backend
+  cart_nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    environment:
+      PHP_HOST: cart_php
+    volumes:
+      - ./services/cart:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/templates/default.conf.template:ro
+    depends_on:
+      - cart_php
+    networks:
+      - marketplace-microservices-backend
+  cart_php:
+    build:
+      context: .
+      dockerfile: docker/dockerfiles/php.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./services/cart:/var/www/html
+    depends_on:
+      - cart_mysql
+    networks:
+      - marketplace-microservices-backend
+  cart_mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    env_file:
+      - services/cart/.env
+    ports:
+      - "33063:3306"
+    volumes:
+      - cart_db_data:/var/lib/mysql
+    networks:
+      - marketplace-microservices-backend
   image_processor:
     build:
       context: ./services/image_processor
@@ -99,3 +133,4 @@ networks:
 volumes:
   catalog_db_data:
   profile_db_data:
+  cart_db_data:

@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Catalog microservice
-  description: Catalog microservice
+  title: Catalog service
+  description: Catalog service
   version: 1.0.0
 servers:
   - url: '/api/catalog'
